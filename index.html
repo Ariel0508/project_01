@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Navbar</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dropdown link
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                     <a class="nav-link" data-bs-toggle="offcanvas" href="#offcanvasExample" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                        class="bi bi-cart3" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </svg></a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasExampleLabel">購物車</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+            <div v-for="(cart,idx) in carts">
+             <h3>{{cart.title}}</h3>  
+             <div>NT.{{cart.price}}</div>
+             <button class="btn btn-danger btn-sm my-3" @click="removeCartItem(idx)">移除</button>
+            </div>
+            <hr>
+              <button class="btn btn-outline-danger" @click="clearCart()">清空購物車</button>
+            </div>
+          </div>
+        <div class="container py-5">
+            <div class="row g-3" >
+                <div class="col-12 col-md-6 col-lg-3" v-for="(product,idx) in products" :key="product.id">
+                    <div class="border p-2">
+                        <img :src="product.cover" alt="" class="img-fluid">
+                        <h4 class="py-2">{{product.title}}</h4>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <div>NT.{{product.price}}</div>
+                            <div><button class="btn btn-danger btn-sm" @click="storeToCart(product.id)">加入購物車</button></div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        {{carts}}
+    </div>
+
+    <script>
+        Vue.createApp({
+            data(){
+                return{
+                    products:[
+                    {id: 1, title:'Charlie Crocs(鞋扣)', cover:"https://shoplineimg.com/625cd9cb8f7c6200691ed3d8/6388826ca0e55d00318bdd42/800x.webp?source_format=JPG", price:'599', sale:''},
+                    {id: 2, title:'酒鬼恐龍玻璃杯組合', cover:"https://shoplineimg.com/625cd9cb8f7c6200691ed3d8/63ad789bac47fb0023954508/800x.webp?source_format=jpeg", price:'880', sale:''},
+                    {id: 3, title:'Ankylo Loves Cook Sticker', cover:"https://shoplineimg.com/625cd9cb8f7c6200691ed3d8/62da71dac0c556001d933427/800x.webp?source_format=jpg", price:'750', sale:''},
+                    {id: 4, title:'無厘頭恐龍', cover:"https://shoplineimg.com/625cd9cb8f7c6200691ed3d8/63ad79d3af8722000e1e572a/800x.webp?source_format=jpeg", price:'399', sale:''},
+                    ],
+                    carts:[],
+            
+                }
+            },
+            methods:{
+                storeToCart(pid){
+                    let pd =this.products.find(p=>p.id === pid);
+                    this.carts.push(pd);
+                },
+                removeCartItem(idx){
+                 this.carts.splice(idx,1);
+                },
+                clearCart(){
+                    if(confirm('確認清空購物車?')){
+                        this.carts.length = 0;
+                }
+            }
+        }
+        }).mount('#app')
+    </script>
+</body>
+</html>
